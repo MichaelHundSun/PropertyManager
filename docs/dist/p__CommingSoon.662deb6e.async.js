@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{lskA:function(s,t,_){s.exports={main:"main___2w-yE",title:"title___1K5WW"}},oVHJ:function(s,t,_){"use strict";_.r(t);var l=_("tMyG"),E=_("lskA"),a=_.n(E),n=_("nKUr"),e=_.n(n);t.default=function(){return Object(n.jsx)(l.a,{children:Object(n.jsx)("div",{className:a.a.title,children:"\u656C\u8BF7\u671F\u5F85"})})}}}]);
