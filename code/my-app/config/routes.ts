@@ -50,7 +50,23 @@ export default [
     name: '维修管理',
     icon: 'smile',
     path: '/repair',
-    component: './CommingSoon',
+    component: './Repair',
+    // routes: [
+    //   {
+    //     hideInMenu: true,
+    //     name: '基础详情页',
+    //     icon: 'smile',
+    //     path: '/repair/profilebasic',
+    //     component: './ProfileBasic',
+    //   },
+    // ]
+  },
+  {
+    hideInMenu: true,
+    name: '反馈详情',
+    icon: 'smile',
+    path: '/repair/profilebasic',
+    component: './ProfileBasic',
   },
   {
     name: '费用管理',
@@ -83,6 +99,6 @@ export default [
     component: './CommingSoon',
   },
   {
-    component: './404',
+    component: './user/Login',
   },
 ];

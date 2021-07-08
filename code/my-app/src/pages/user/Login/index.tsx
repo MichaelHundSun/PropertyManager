@@ -1,16 +1,16 @@
 import {
-  AlipayCircleOutlined,
+  // AlipayCircleOutlined,
   LockOutlined,
   MobileOutlined,
-  TaobaoCircleOutlined,
+  // TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
+  // WeiboCircleOutlined,
 } from '@ant-design/icons';
-import { Alert, Space, message, Tabs } from 'antd';
+import { Alert, message } from 'antd';
 import React, { useState } from 'react';
-import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
-import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
-import Footer from '@/components/Footer';
+import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
+import { useIntl, Link, history, FormattedMessage, useModel } from 'umi';
+// import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 
@@ -42,7 +42,7 @@ const goto = () => {
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('account');
+  const [type] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const intl = useIntl();
@@ -58,16 +58,18 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
+    goto();
+    return;
     setSubmitting(true);
     try {
       // 登录
       const msg = await login({ ...values, type });
       if (msg.status === 'ok') {
-        const defaultloginSuccessMessage = intl.formatMessage({
+        const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
-        message.success(defaultloginSuccessMessage);
+        message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         goto();
         return;
@@ -75,12 +77,12 @@ const Login: React.FC = () => {
       // 如果失败去设置用户错误信息
       setUserLoginState(msg);
     } catch (error) {
-      const defaultloginFailureMessage = intl.formatMessage({
+      const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
         defaultMessage: '登录失败，请重试！',
       });
 
-      message.error(defaultloginFailureMessage);
+      message.error(defaultLoginFailureMessage);
     }
     setSubmitting(false);
   };
