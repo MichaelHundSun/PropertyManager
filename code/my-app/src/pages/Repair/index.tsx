@@ -148,26 +148,94 @@ export default () => {
       valueType: 'option',
       render: (_, entity) => {
         return [
-          <Button
-            className={styles.button}
-            style={{ padding: 0, margin: 0 }}
-            size="small"
-            disabled={entity.status === 'error'}
-            type="link"
-            key="link"
-          >
-            派单
-          </Button>,
-          <Button
-            style={{ padding: 0, margin: 0 }}
-            disabled={
-              entity.status === 'error' || entity.status === 'running' || entity.status === 'online'
+          <ModalForm
+            title="派单"
+            onFinish={async (values: any) => {
+              await waitTime(2000);
+              console.log(values);
+              message.success('提示派单成功，已短信通知');
+              return true;
+            }}
+            trigger={
+              <Button
+                className={styles.button}
+                style={{ padding: 0, margin: 0 }}
+                size="small"
+                disabled={entity.status === 'error'}
+                type="link"
+                key="link"
+              >
+                派单
+              </Button>
             }
-            type="link"
-            key="link2"
           >
-            上报
-          </Button>,
+            {' '}
+            <ProFormSelect
+              options={[
+                {
+                  value: 'sjw',
+                  label: '孙建伟',
+                },
+                {
+                  value: 'lq',
+                  label: '李强',
+                },
+                {
+                  value: 'zs',
+                  label: '张三',
+                },
+              ]}
+              width="md"
+              name="useMode"
+              label={`派单给:`}
+            />
+            <ProFormTextArea name="project" width="md" label="描述" initialValue="" />
+          </ModalForm>,
+          <ModalForm
+            title="上报"
+            onFinish={async (values: any) => {
+              await waitTime(2000);
+              console.log(values);
+              message.success('上报成功,请等待上级处理');
+              return true;
+            }}
+            trigger={
+              <Button
+                style={{ padding: 0, margin: 0 }}
+                disabled={
+                  entity.status === 'error' ||
+                  entity.status === 'running' ||
+                  entity.status === 'online'
+                }
+                type="link"
+                key="link2"
+              >
+                上报
+              </Button>
+            }
+          >
+            <ProFormSelect
+              options={[
+                {
+                  value: 'sjw',
+                  label: '办公室',
+                },
+                {
+                  value: 'lq',
+                  label: '物业',
+                },
+                {
+                  value: 'zs',
+                  label: '领导1',
+                },
+              ]}
+              width="md"
+              name="useMode"
+              label={`上报部门:`}
+            />
+            <ProFormTextArea name="project" width="md" label="上报内容" initialValue="" />
+          </ModalForm>,
+
           <Popconfirm
             disabled={entity.status === 'error'}
             key="popconfirm"
@@ -308,17 +376,19 @@ export default () => {
       // toolBarRender={false}
       toolBarRender={() => [
         <ModalForm
+          title="新建工单"
           labelWidth="auto"
           trigger={
             <Button type="primary">
               <PlusOutlined />
-              新建上报
+              新建工单
             </Button>
           }
           onFinish={async (values: any) => {
             await waitTime(2000);
             console.log(values);
             message.success('提交成功');
+            return true;
           }}
           initialValues={{
             name: '',

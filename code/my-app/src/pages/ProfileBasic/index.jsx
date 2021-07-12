@@ -1,50 +1,165 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import { Badge, Button, Card, Descriptions, Divider } from 'antd';
+import { Badge, Button, Card, Descriptions, Divider, Space, Popconfirm, message } from 'antd';
+import {
+  EllipsisOutlined,
+  QuestionCircleOutlined,
+  SearchOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 import React from 'react';
 import { history, useRequest } from 'umi';
 import { queryBasicProfile } from './service';
 import styles from './style.less';
+import ProForm, {
+  ModalForm,
+  DrawerForm,
+  QueryFilter,
+  LightFilter,
+  StepsForm,
+  ProFormText,
+  ProFormDateRangePicker,
+  ProFormSelect,
+  ProFormRadio,
+  ProFormDateTimePicker,
+  ProFormTextArea,
+  ProFormUploadButton,
+} from '@ant-design/pro-form';
 
-const progressColumns = [
-  {
-    title: '电工',
-    dataIndex: 'time',
-    key: 'time',
-  },
-  {
-    title: '出工时间',
-    dataIndex: 'rate',
-    key: 'rate',
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-  },
-];
+const waitTime = (time = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};
 
 const ProfileBasic = () => {
   const { data, loading } = useRequest(() => {
     return queryBasicProfile();
   });
+  const progressColumns = [
+    {
+      title: '电工',
+      dataIndex: 'time',
+      key: 'time',
+    },
+    {
+      title: '时间',
+      dataIndex: 'rate',
+      key: 'rate',
+    },
+    {
+      title: '出工时长',
+      dataIndex: 'length',
+      key: 'length',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: '操作',
+      width: 200,
+      key: 'option',
+      valueType: 'option',
+      render: () => {
+        return [
+          <ModalForm
+            title="修改记录"
+            onFinish={async (values) => {
+              await waitTime(2000);
+              console.log(values);
+              message.success('修改记录成功');
+              return true;
+            }}
+            trigger={
+              <Button
+                className={styles.button}
+                style={{ padding: 0, margin: 0 }}
+                size="small"
+                type="link"
+                key="link"
+              >
+                修改
+              </Button>
+            }
+          >
+            <ProFormSelect
+              width="md"
+              name="name"
+              label={`出工人`}
+              options={[
+                {
+                  value: 'sjw',
+                  label: '孙建伟',
+                },
+                {
+                  value: 'lq',
+                  label: '李强',
+                },
+              ]}
+            />
+            <ProFormDateTimePicker width="md" name="startTime" label={`开始时间`} />
+            <ProFormDateTimePicker width="md" name="endTime" label={`结束时间`} />
+            <ProFormSelect
+              width="md"
+              name="statues"
+              label={`状态`}
+              options={[
+                {
+                  value: 'sjw',
+                  label: '已完成',
+                },
+                {
+                  value: 'lq',
+                  label: '未完成',
+                },
+              ]}
+            />
+          </ModalForm>,
+
+          <Popconfirm key="popconfirm" title={`确认删除吗?`} okText="是" cancelText="否">
+            <Button style={{ padding: 0, margin: 0 }} type="link">
+              删除
+            </Button>
+          </Popconfirm>,
+
+          // <TableDropdown
+          //   key="actionGroup"
+          //   menus={[
+          //     { key: 'copy', name: '复制' },
+          //     { key: 'delete', name: '删除' },
+          //   ]}
+          // />,
+        ];
+      },
+    },
+  ];
   const { basicGoods, basicProgress } = {
     basicGoods: [
       {
         time: '孙建伟',
-        rate: '2021/07/05',
+        rate: '2021/07/05 09:00 ~ 2021/07/05 12:00',
+        length: '3小时',
+
         status: '已完成',
       },
     ],
     basicProgress: [
       {
         time: '孙建伟',
-        rate: '2021/07/05',
+        rate: '2021/07/05 09:00 ~ 2021/07/05 12:00',
+        length: '3小时',
+        endTime: '2021/07/05',
         status: '已完成',
       },
       {
         time: '孙建伟',
-        rate: '2021/07/05',
+        rate: '2021/07/05 09:00 ~ 2021/07/05 12:00',
+        length: '3小时',
+        endTime: '2021/07/05',
         status: '已完成',
       },
     ],
@@ -118,6 +233,83 @@ const ProfileBasic = () => {
       dataIndex: 'price',
       key: 'price',
     },
+    {
+      title: '操作',
+      width: 200,
+      key: 'option',
+      valueType: 'option',
+      render: () => {
+        return [
+          <ModalForm
+            title="修改记录"
+            onFinish={async (values) => {
+              await waitTime(2000);
+              console.log(values);
+              message.success('修改记录成功');
+              return true;
+            }}
+            trigger={
+              <Button
+                className={styles.button}
+                style={{ padding: 0, margin: 0 }}
+                size="small"
+                type="link"
+                key="link"
+              >
+                修改
+              </Button>
+            }
+          >
+            <ProFormSelect
+              width="md"
+              name="name"
+              label={`出工人`}
+              options={[
+                {
+                  value: 'sjw',
+                  label: '孙建伟',
+                },
+                {
+                  value: 'lq',
+                  label: '李强',
+                },
+              ]}
+            />
+            <ProFormDateTimePicker width="md" name="startTime" label={`开始时间`} />
+            <ProFormDateTimePicker width="md" name="endTime" label={`结束时间`} />
+            <ProFormSelect
+              width="md"
+              name="statues"
+              label={`状态`}
+              options={[
+                {
+                  value: 'sjw',
+                  label: '已完成',
+                },
+                {
+                  value: 'lq',
+                  label: '未完成',
+                },
+              ]}
+            />
+          </ModalForm>,
+
+          <Popconfirm key="popconfirm" title={`确认删除吗?`} okText="是" cancelText="否">
+            <Button style={{ padding: 0, margin: 0 }} type="link">
+              删除
+            </Button>
+          </Popconfirm>,
+
+          // <TableDropdown
+          //   key="actionGroup"
+          //   menus={[
+          //     { key: 'copy', name: '复制' },
+          //     { key: 'delete', name: '删除' },
+          //   ]}
+          // />,
+        ];
+      },
+    },
   ];
   return (
     <PageContainer>
@@ -180,6 +372,56 @@ const ProfileBasic = () => {
           dataSource={goodsData}
           columns={goodsColumns}
           rowKey="id"
+          toolBarRender={() => [
+            <ModalForm
+              title="新建记录"
+              onFinish={async (values) => {
+                await waitTime(2000);
+                console.log(values);
+                message.success('修改记录成功');
+                return true;
+              }}
+              trigger={
+                <Button type="primary">
+                  <PlusOutlined />
+                  新建记录
+                </Button>
+              }
+            >
+              <ProFormSelect
+                width="md"
+                name="name"
+                label={`出工人`}
+                options={[
+                  {
+                    value: 'sjw',
+                    label: '孙建伟',
+                  },
+                  {
+                    value: 'lq',
+                    label: '李强',
+                  },
+                ]}
+              />
+              <ProFormDateTimePicker width="md" name="startTime" label={`开始时间`} />
+              <ProFormDateTimePicker width="md" name="endTime" label={`结束时间`} />
+              <ProFormSelect
+                width="md"
+                name="statues"
+                label={`状态`}
+                options={[
+                  {
+                    value: 'sjw',
+                    label: '已完成',
+                  },
+                  {
+                    value: 'lq',
+                    label: '未完成',
+                  },
+                ]}
+              />
+            </ModalForm>,
+          ]}
         />
         <div className={styles.title}>电工出工记录</div>
         <ProTable
@@ -193,6 +435,56 @@ const ProfileBasic = () => {
           toolBarRender={false}
           dataSource={basicProgress}
           columns={progressColumns}
+          toolBarRender={() => [
+            <ModalForm
+              title="新建记录"
+              onFinish={async (values) => {
+                await waitTime(2000);
+                console.log(values);
+                message.success('修改记录成功');
+                return true;
+              }}
+              trigger={
+                <Button type="primary">
+                  <PlusOutlined />
+                  新建记录
+                </Button>
+              }
+            >
+              <ProFormSelect
+                width="md"
+                name="name"
+                label={`出工人`}
+                options={[
+                  {
+                    value: 'sjw',
+                    label: '孙建伟',
+                  },
+                  {
+                    value: 'lq',
+                    label: '李强',
+                  },
+                ]}
+              />
+              <ProFormDateTimePicker width="md" name="startTime" label={`开始时间`} />
+              <ProFormDateTimePicker width="md" name="endTime" label={`结束时间`} />
+              <ProFormSelect
+                width="md"
+                name="statues"
+                label={`状态`}
+                options={[
+                  {
+                    value: 'sjw',
+                    label: '已完成',
+                  },
+                  {
+                    value: 'lq',
+                    label: '未完成',
+                  },
+                ]}
+              />
+            </ModalForm>,
+          ]}
         />
       </Card>
     </PageContainer>
